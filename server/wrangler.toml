@@ -1,8 +1,11 @@
 name = "server"
 compatibility_date = "2023-12-01"
 
-# [vars]
-# MY_VAR = "my-variable"
+[vars]
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiYzE0MDkwNGUtZmEyYy00MWE1LWIwYjEtODAwY2RlZTI4MzI2IiwidGVuYW50X2lkIjoiMjc4Mzg3ZDI2NDBmMGU2NTg3Zjg0YjMyZTc0YjljNmM5YTIzMGExYWY3Mzk3YjVhY2FjNWYyZjQ1MDM3N2RjYiIsImludGVybmFsX3NlY3JldCI6IjA4NTRjNjRiLWQzNGItNGU2NS04ODk3LTA2ODA3MTA0Yzg1YyJ9.hYhjGbRGhFmPu0JG9yo39YZL2bgjiR5MIPEK3DBWFu0"
+JWT_SECRET="jwtSecretPassword"
+
+
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
