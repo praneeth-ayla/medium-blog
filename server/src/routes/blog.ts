@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
-import { verify } from "hono/jwt";
+import authMiddleware from "../authMiddleware";
 import {
 	blogCreateInput,
 	blogUpdateInput,
-} from "@praneethaylalvl1/medium-common";
+} from "../../../common/dist/index.js";
 
 export const blogRouter = new Hono<{
 	Bindings: {
@@ -17,28 +17,7 @@ export const blogRouter = new Hono<{
 	};
 }>();
 
-blogRouter.use("/*", async (c, next) => {
-	const token = c.req.header("authorization") || "";
-
-	try {
-		const user = await verify(token, c.env.JWT_SECRET);
-		if (user) {
-			c.set("userId", user.id);
-			await next();
-		} else {
-			c.status(403);
-			return c.json({
-				message: "You are not Authorized",
-			});
-		}
-	} catch (error) {
-		console.log("Error", error);
-		c.status(400);
-		return c.json({
-			message: "Internal Server Error",
-		});
-	}
-});
+blogRouter.use("/*", authMiddleware);
 
 blogRouter.post("/", async (c) => {
 	const body = await c.req.json();
@@ -56,11 +35,14 @@ blogRouter.post("/", async (c) => {
 	}).$extends(withAccelerate());
 
 	try {
+		const currentDateAndTime = new Date().toLocaleString();
 		const blog = await prisma.post.create({
 			data: {
 				title: body.title,
 				content: body.content,
 				authorId: c.get("userId"),
+				postedOn: currentDateAndTime,
+				published: body.published,
 			},
 		});
 
@@ -99,6 +81,7 @@ blogRouter.put("/", async (c) => {
 			data: {
 				title: body.title,
 				content: body.content,
+				published: body.published,
 			},
 		});
 
@@ -121,7 +104,16 @@ blogRouter.get("/bulk", async (c) => {
 
 	try {
 		const blogs = await prisma.post.findMany({
-			where: { authorId: c.get("userId") },
+			select: {
+				content: true,
+				title: true,
+				id: true,
+				postedOn: true,
+				published: true,
+				author: {
+					select: { name: true },
+				},
+			},
 		});
 
 		return c.json({
@@ -130,11 +122,8 @@ blogRouter.get("/bulk", async (c) => {
 	} catch (error) {
 		console.log("Error: " + error);
 		c.status(403);
-		c.json({ message: "Internal Server Error" });
+		return c.json({ message: "Internal Server Error" });
 	}
-	return c.json({
-		msg: "/bulk ",
-	});
 });
 
 blogRouter.get("/:id", async (c) => {
@@ -149,12 +138,52 @@ blogRouter.get("/:id", async (c) => {
 			where: {
 				id: id,
 			},
+			select: {
+				author: {
+					select: {
+						name: true,
+					},
+				},
+				content: true,
+				title: true,
+				id: true,
+				postedOn: true,
+				published: true,
+				authorId: true,
+			},
 		});
 		return c.json({ blog });
 	} catch (error) {
 		console.log("Error: ", error);
 		c.status(403);
 		c.json({
+			message: "Internal Server Error",
+		});
+	}
+});
+
+blogRouter.delete("/:id", async (c) => {
+	const id = c.req.param("id");
+
+	const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL,
+	}).$extends(withAccelerate());
+
+	try {
+		const res = await prisma.post.delete({
+			where: {
+				id: id,
+				authorId: c.get("userId"),
+			},
+		});
+		console.log(res);
+		return c.json({
+			message: "Post deleted successfully",
+		});
+	} catch (error) {
+		console.log("Error: ", error);
+		c.status(403);
+		return c.json({
 			message: "Internal Server Error",
 		});
 	}
