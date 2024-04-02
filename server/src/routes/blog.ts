@@ -5,7 +5,7 @@ import authMiddleware from "../authMiddleware";
 import {
 	blogCreateInput,
 	blogUpdateInput,
-} from "../../../common/dist/index.js";
+} from "@praneethaylalvl1/medium-common";
 
 export const blogRouter = new Hono<{
 	Bindings: {
@@ -110,6 +110,7 @@ blogRouter.get("/bulk", async (c) => {
 				id: true,
 				postedOn: true,
 				published: true,
+				authorId: true,
 				author: {
 					select: { name: true },
 				},
