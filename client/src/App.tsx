@@ -4,6 +4,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Blog from "./pages/Blog";
 import Blogs from "./pages/Blogs";
+import User from "./pages/User";
 
 function App() {
 	return (
@@ -22,6 +23,9 @@ function App() {
 				<Route
 					path="/blog/:id"
 					element={<Blog></Blog>}></Route>
+				<Route
+					path="/user/:id"
+					element={<User></User>}></Route>
 			</Routes>
 		</BrowserRouter>
 		// </div>

@@ -32,7 +32,6 @@ export default function Auth({ type }: { type: "signup" | "signin" }) {
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen ">
-			{JSON.stringify(postInputs)}
 			<TitleAuth type={type}></TitleAuth>
 			<div className="grid gap-3 pt-10">
 				{type === "signin" ? null : (
