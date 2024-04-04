@@ -19,11 +19,14 @@ function App() {
 					path="/signin"
 					element={<Signin></Signin>}></Route>
 				<Route
-					path="/home"
+					path="/blogs"
 					element={<Blogs></Blogs>}></Route>
 				<Route
 					path="/write"
-					element={<Editor></Editor>}></Route>
+					element={<Editor edit={false}></Editor>}></Route>
+				<Route
+					path="/edit/:id"
+					element={<Editor edit={true}></Editor>}></Route>
 				<Route
 					path="/blog/:id"
 					element={<Blog></Blog>}></Route>

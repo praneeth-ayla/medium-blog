@@ -10,13 +10,13 @@ export default function User() {
 	const { loading, userData } = useUserData(id!);
 
 	if (loading) {
-		<Appbar name="praneeth"></Appbar>;
+		<Appbar></Appbar>;
 		return <div>loading.....</div>;
 	}
 
 	return (
 		<div>
-			<Appbar name="praneeth" />
+			<Appbar />
 			<div>
 				<div className="p-6 px-32 overflow-y-auto text-2xl font-bold first-letter:uppercase">
 					{userData?.name}'s Posts:

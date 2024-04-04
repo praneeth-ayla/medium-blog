@@ -11,7 +11,7 @@ export default function Blog() {
 	}
 	return (
 		<div>
-			<Appbar name="praneeth" />
+			<Appbar />
 			<div className="flex justify-center ">
 				<div className="flex flex-col justify-center w-5/6 ">
 					<FullBlog blog={blog!} />

@@ -1,56 +1,76 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Appbar from "../components/Appbar";
+import axios from "axios";
+import { BACKEND_URL } from "../../config";
+import EditorPreview from "../components/Editor_Preview";
+import PostblogBtn from "../components/PostblogBtn";
+import { useParams, useNavigate } from "react-router-dom";
+import { useBlog } from "../hooks";
 
-import Preview from "./Preview";
-export default function Editor() {
+export default function Editor({ edit }: { edit: boolean }) {
+	const navigate = useNavigate();
+	const { id } = useParams();
 	const [title, setTitle] = useState("");
 	const [markdown, setMarkdown] = useState("# Write Markdown");
+	const { blog, loading } = useBlog({ id: id || "" });
+
+	useEffect(() => {
+		if (edit && !loading && blog) {
+			setTitle(blog.title);
+			setMarkdown(blog.content);
+		}
+	}, [edit, loading, blog]);
+
+	async function postOrEditBlog(
+		id: string,
+		title: string,
+		markdown: string,
+		published: boolean
+	) {
+		const url = edit
+			? `${BACKEND_URL}/api/v1/blog`
+			: `${BACKEND_URL}/api/v1/blog`;
+		const method = edit ? "put" : "post";
+
+		try {
+			const response = await axios[method](
+				url,
+				{ id, title, content: markdown, published },
+				{
+					headers: {
+						Authorization: localStorage.getItem("token"),
+					},
+				}
+			);
+			console.log(response.data.message);
+			navigate("/blogs");
+		} catch (error) {
+			console.error("Error:", error);
+			// Handle error
+		}
+	}
+
 	return (
 		<div>
-			<Appbar name="Praneeth" />
-
-			<div className="flex justify-center">
-				<div className="grid w-screen grid-cols-1 p-3 sm:grid-cols-3 lg:grid-cols-2">
-					<div className="flex flex-col h-screen col-span-1 p-3 pr-5 mb-32 sm:m-0 sm:border-r-2 sm:col-span-2 lg:col-span-1">
-						<div className="flex flex-col h-fit">
-							<div className="pb-3 mb-10 text-3xl font-bold border-b-4 text-slate-500">
-								Editor:
-							</div>
-
-							<textarea
-								onChange={(e) => {
-									setTitle(e.target.value);
-								}}
-								placeholder="Title"
-								maxLength={150}
-								className="p-3 mb-10 text-xl border resize-none min-h-28"
-							/>
-							<textarea
-								className="block min-h-full p-2 border resize-none min"
-								style={{ height: "auto" }}
-								placeholder="Write Markdown here to display it"
-								onChange={(e) => {
-									setMarkdown(e.target.value);
-								}}>
-								{markdown}
-							</textarea>
-						</div>
-					</div>
-					<div className="h-screen col-span-1 p-3 pl-5 overflow-y-auto sm:col-span-1 lg:col-span-1">
-						<div>
-							<div className="pb-3 mb-4 text-3xl font-bold border-b-4 text-slate-500">
-								Preview:
-							</div>
-							<div className="flex flex-col font-serif text-4xl font-extrabold ">
-								<div className="pb-3 border-b-2">{title}</div>
-								<div className="pt-3 prose scale-x-90 scale-y-95">
-									<Preview text={markdown}></Preview>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<Appbar />
+			{loading ? (
+				<div>Loading...</div>
+			) : (
+				<>
+					<PostblogBtn
+						id={id || ""}
+						markdown={markdown}
+						title={title}
+						postBlog={postOrEditBlog}
+					/>
+					<EditorPreview
+						markdown={markdown}
+						title={title}
+						setMarkdown={setMarkdown}
+						setTitle={setTitle}
+					/>
+				</>
+			)}
 		</div>
 	);
 }

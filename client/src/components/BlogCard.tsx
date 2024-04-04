@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import ShareBtn from "./ShareBtn";
+import Preview from "./Preview";
 
 interface BlogCardProps {
 	authorName: string;
@@ -42,14 +43,19 @@ export default function BlogCard({
 				<div>
 					<ShareBtn
 						link={`${window.location.origin}/blog/${id}`}></ShareBtn>
+				</div>{" "}
+				<div>
+					<Link to={"/edit/" + id}>afdlksdfj</Link>
 				</div>
 			</div>
 			<Link
 				to={"/blog/" + id}
 				className="cursor-pointer hover:scale-105">
-				<div className="pt-2 text-2xl font-bold ">{title}</div>
+				<div className="pt-2 font-serif text-2xl font-bold">
+					{title}
+				</div>
 				<div className="pt-1 font-serif font-thin text-slate-600">
-					{content.slice(0, 450)}...
+					<Preview text={content.slice(0, 450) + "..."}></Preview>
 				</div>
 				<div className="pt-2 text-sm font-normal text-slate-600">
 					{`${

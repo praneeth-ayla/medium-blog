@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import Logo from "./Logo";
+import { useUserDetails } from "../hooks";
 
-export default function Appbar({ name }: { name: string }) {
+export default function Appbar() {
+	const userDetails = useUserDetails(localStorage.getItem("token"));
 	return (
 		<div
 			className="p-2 px-10 border-b"
@@ -15,7 +17,7 @@ export default function Appbar({ name }: { name: string }) {
 				</Link>
 				<div className="flex gap-20">
 					<Avatar
-						name={name}
+						name={userDetails.name}
 						size="big"></Avatar>
 				</div>
 			</div>
