@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import Blog from "./pages/Blog";
 import Blogs from "./pages/Blogs";
 import User from "./pages/User";
+import Editor from "./pages/Editor";
 
 function App() {
 	return (
@@ -18,8 +19,11 @@ function App() {
 					path="/signin"
 					element={<Signin></Signin>}></Route>
 				<Route
-					path="/blogs"
+					path="/home"
 					element={<Blogs></Blogs>}></Route>
+				<Route
+					path="/write"
+					element={<Editor></Editor>}></Route>
 				<Route
 					path="/blog/:id"
 					element={<Blog></Blog>}></Route>
