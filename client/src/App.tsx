@@ -30,6 +30,9 @@ function App() {
 				) : (
 					<>
 						<Route
+							path="/"
+							element={<Blogs></Blogs>}></Route>
+						<Route
 							path="/blogs"
 							element={<Blogs></Blogs>}></Route>
 						<Route
