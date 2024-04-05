@@ -3,6 +3,7 @@ import Avatar from "./Avatar";
 import Logo from "./Logo";
 import { useUserDetails } from "../hooks";
 import { useState, useRef, useEffect } from "react";
+import Logout from "./Logout";
 
 export default function Appbar({ write = true }: { write: boolean }) {
 	const userDetails = useUserDetails(localStorage.getItem("token"));
@@ -107,9 +108,15 @@ export default function Appbar({ write = true }: { write: boolean }) {
 										<Link to={"/your-blogs"}>
 											<div>Your Blogs</div>
 										</Link>
-										<div>Settings</div>
+										<div>
+											<Link to={"/settings"}>
+												<div className="cursor-pointer">
+													Settings
+												</div>
+											</Link>
+										</div>
 										<div className="pt-1 -mt-1 border-t">
-											Log out
+											<Logout></Logout>
 										</div>
 									</div>
 								</div>
