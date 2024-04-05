@@ -31,12 +31,6 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
 										blog.postedOn.indexOf(",")
 									)}
 								</div>
-								<div>
-									at
-									{blog.postedOn
-										.slice(9)
-										.replace(/:\d+\s/, " ")}
-								</div>
 
 								<div className="text-slate-400">&#x2022;</div>
 								<div className="font-normal text-slate-500">

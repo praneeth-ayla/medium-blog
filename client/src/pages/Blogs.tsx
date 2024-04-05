@@ -24,7 +24,7 @@ export default function Blogs() {
 								authorName={blog.author.name}
 								content={blog.content}
 								title={blog.title}
-								publishedDate="2 April 2024"
+								publishedDate={blog.postedOn.substring(0, 8)}
 							/>
 						);
 					})}

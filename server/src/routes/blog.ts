@@ -6,6 +6,7 @@ import {
 	blogCreateInput,
 	blogUpdateInput,
 } from "@praneethaylalvl1/medium-common";
+import * as moment from "moment-timezone";
 
 export const blogRouter = new Hono<{
 	Bindings: {
@@ -35,13 +36,17 @@ blogRouter.post("/", async (c) => {
 	}).$extends(withAccelerate());
 
 	try {
-		const currentDateAndTime = new Date().toLocaleString();
+		// Get the current time in Indian Standard Time (IST)
+		const indianTime = moment
+			.tz("Asia/Kolkata")
+			.format("D/M/YYYY, h:mm:ss");
+
 		const blog = await prisma.post.create({
 			data: {
 				title: body.title,
 				content: body.content,
 				authorId: c.get("userId"),
-				postedOn: currentDateAndTime,
+				postedOn: indianTime,
 				published: body.published,
 			},
 		});

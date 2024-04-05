@@ -34,7 +34,10 @@ export default function User() {
 											authorName={userData.name}
 											content={blog.content}
 											title={blog.title}
-											publishedDate="2 April 2024"
+											publishedDate={blog.postedOn.substring(
+												0,
+												8
+											)}
 										/>
 									);
 								})}
@@ -51,10 +54,10 @@ export default function User() {
 								{userData?.name}
 							</div>
 						</div>
+						<div className="pl-14">{userData?.email}</div>
 						<div className="pt-6 text-lg font-medium">
 							Total Posts: {userData?.posts.length}
 							<br />
-							Last Upload: {userData?.posts[0].postedOn}
 						</div>
 					</div>
 				</div>
