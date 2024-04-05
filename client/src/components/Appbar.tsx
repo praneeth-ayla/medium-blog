@@ -72,7 +72,7 @@ export default function Appbar({ write = true }: { write: boolean }) {
 										onClick={() => {
 											setHover(!hover);
 										}}
-										className="first-letter:uppercase">
+										className="border-b-4 first-letter:uppercase">
 										{userDetails.name}
 										<span className="relative bottom-0 font-bold">
 											&#8964;
@@ -94,8 +94,8 @@ export default function Appbar({ write = true }: { write: boolean }) {
 										size="big"
 									/>
 									<div className="flex justify-center gap-1 cursor-pointer">
-										<div className="first-letter:uppercase">
-											{userDetails.name}
+										<div className="border-b-4 border-blue-950 first-letter:uppercase">
+											{userDetails.name}{" "}
 											<span className="relative bottom-0 font-bold">
 												&#8964;
 											</span>
