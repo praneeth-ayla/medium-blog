@@ -1,7 +1,7 @@
-import { useFormik } from "formik";
 import Appbar from "./Appbar";
 import LabelInput from "./LabelInput";
 import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
 import axios from "axios";
 import { BACKEND_URL } from "../../config";
@@ -19,14 +19,17 @@ export default function Settings() {
 			if (password.length >= 6) {
 				body["password"] = password;
 			} else {
-				alert("password  should be greater than 6");
+				toast.error("Password should be more than 6 characters");
+				return; // Exit early if password is invalid
 			}
 		}
 
-		if (Object.keys(body).length === 0) {
-			alert("Empty fields");
-		} else {
-			console.log(body);
+		if (Object.keys(body).length === 0 && password.length === 6) {
+			toast("There is nothing to change");
+			return; // Exit early if there's nothing to change
+		}
+
+		try {
 			const res = await axios.put(
 				`${BACKEND_URL}/api/v1/user/update`,
 				body,
@@ -36,6 +39,18 @@ export default function Settings() {
 					},
 				}
 			);
+			if (res.status === 200) {
+				// Provide more context in the success message
+				const updatedSettings = Object.keys(body).join(", ");
+				toast.success(`Update successful for: ${updatedSettings}`);
+			}
+		} catch (error: any) {
+			console.warn(error);
+			const errorMessage =
+				error.response?.data?.message ?? "Invalid Inputs";
+			toast.warning(errorMessage, {
+				duration: 2000,
+			});
 		}
 	}
 
@@ -80,6 +95,7 @@ export default function Settings() {
 					</div>
 				</div>
 			</div>
+			<Toaster position="top-right"></Toaster>
 		</div>
 	);
 }

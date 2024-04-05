@@ -4,7 +4,8 @@ import TitleAuth from "./AuthHeader";
 import LabelInput from "./LabelInput";
 import axios from "axios";
 import { BACKEND_URL } from "../../config";
-import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "sonner";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Auth({ type }: { type: "signup" | "signin" }) {
 	const [postInputs, setPostInputs] = useState<SignupInput>({
@@ -13,7 +14,6 @@ export default function Auth({ type }: { type: "signup" | "signin" }) {
 		password: "",
 	});
 
-	const navigate = useNavigate();
 	async function sendRequest() {
 		try {
 			const res = await axios.post(
@@ -22,17 +22,33 @@ export default function Auth({ type }: { type: "signup" | "signin" }) {
 				}`,
 				postInputs
 			);
+
 			const jwt = res.data.jwt;
 			localStorage.setItem("token", jwt);
-			navigate("/blogs");
-		} catch (error) {
-			console.log(error);
+			if (res.status === 200) {
+				const successMessage =
+					type === "signin"
+						? "Login Successful"
+						: "Signup Successful";
+				toast.success(successMessage);
+				setTimeout(() => {
+					window.location.reload();
+				}, 1000);
+			}
+		} catch (error: any) {
+			console.warn(error);
+			const errorMessage =
+				error.response?.data?.message ?? "Invalid Inputs";
+			toast.warning(errorMessage, {
+				duration: 2000,
+			});
 		}
 	}
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen ">
 			<TitleAuth type={type}></TitleAuth>
+
 			<div className="grid gap-3 pt-10">
 				{type === "signin" ? null : (
 					<LabelInput
@@ -73,6 +89,11 @@ export default function Auth({ type }: { type: "signup" | "signin" }) {
 					{type === "signin" ? "Sign In" : "Sign Up"}
 				</button>
 			</div>
+			{/* <ToastContainer></ToastContainer> */}
+			<Toaster
+				closeButton
+				position="top-right"
+				duration={1200}></Toaster>
 		</div>
 	);
 }

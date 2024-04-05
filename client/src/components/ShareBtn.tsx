@@ -1,10 +1,12 @@
+import { toast } from "sonner";
+
 export default function ShareBtn({ link }: { link: string }) {
 	return (
 		<div className="cursor-pointer">
 			<a
 				onClick={() => {
 					navigator.clipboard.writeText(link);
-					alert("Copied to clipboard!");
+					toast.success("Copied to clipboard!");
 				}}
 				title="Share Blog">
 				<svg
