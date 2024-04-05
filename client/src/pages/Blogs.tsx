@@ -6,13 +6,13 @@ export default function Blogs() {
 	const { loading, blogs } = useBlogs();
 
 	if (loading) {
-		<Appbar></Appbar>;
+		<Appbar write={true}></Appbar>;
 		return <div>loading.....</div>;
 	}
 
 	return (
 		<div>
-			<Appbar />
+			<Appbar write={true} />
 			<div className="flex justify-center pt-16">
 				<div className="flex flex-col justify-center w-5/6 gap-7 lg:w-1/2 md:w-2/3">
 					{blogs.map((blog) => {

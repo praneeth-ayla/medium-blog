@@ -12,7 +12,9 @@ export default function Editor({ edit }: { edit: boolean }) {
 	const { id } = useParams();
 	const [title, setTitle] = useState("");
 	const [markdown, setMarkdown] = useState("# Write Markdown");
-	const { blog, loading } = useBlog({ id: id || "" });
+	const { blog, loading } = edit
+		? useBlog({ id: id || "" })
+		: { blog: null, loading: false };
 
 	useEffect(() => {
 		if (edit && !loading && blog) {
@@ -52,7 +54,7 @@ export default function Editor({ edit }: { edit: boolean }) {
 
 	return (
 		<div>
-			<Appbar />
+			<Appbar write={false} />
 			{loading ? (
 				<div>Loading...</div>
 			) : (
