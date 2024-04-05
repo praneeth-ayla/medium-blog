@@ -6,6 +6,7 @@ import Blog from "./pages/Blog";
 import Blogs from "./pages/Blogs";
 import User from "./pages/User";
 import Editor from "./pages/Editor";
+import UserBlogs from "./pages/UserBlogs";
 
 function App() {
 	return (
@@ -24,6 +25,9 @@ function App() {
 				<Route
 					path="/write"
 					element={<Editor edit={false}></Editor>}></Route>
+				<Route
+					path="your-blogs"
+					element={<UserBlogs></UserBlogs>}></Route>
 				<Route
 					path="/edit/:id"
 					element={<Editor edit={true}></Editor>}></Route>

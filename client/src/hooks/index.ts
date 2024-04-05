@@ -89,6 +89,29 @@ export function useUserData(id: string) {
 	};
 }
 
+export function useUserBoth() {
+	const [loading, setLoading] = useState(true);
+	const [userData, setuserData] = useState<User>();
+
+	useEffect(() => {
+		axios
+			.get(`${BACKEND_URL}/api/v1/blog/both`, {
+				headers: {
+					Authorization: localStorage.getItem("token"),
+				},
+			})
+			.then((response) => {
+				setuserData(response.data.user);
+				setLoading(false);
+			});
+	}, []);
+
+	return {
+		loading,
+		userData,
+	};
+}
+
 export function useUserDetails(token: any): any {
 	var base64Url = token.split(".")[1];
 	var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");

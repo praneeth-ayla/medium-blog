@@ -3,6 +3,7 @@ import Avatar from "./Avatar";
 import ShareBtn from "./ShareBtn";
 import Preview from "./Preview";
 import EditBtn from "./EditBtn";
+import DeleteBtn from "./DeleteBtn";
 
 interface BlogCardProps {
 	authorName: string;
@@ -48,6 +49,9 @@ export default function BlogCard({
 					<EditBtn
 						authorId={authorId}
 						blogId={id}></EditBtn>
+					<DeleteBtn
+						blogId={id}
+						authorId={authorId}></DeleteBtn>
 				</div>
 			</div>
 			<Link

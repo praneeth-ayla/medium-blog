@@ -2,16 +2,36 @@ import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import Logo from "./Logo";
 import { useUserDetails } from "../hooks";
+import { useState, useRef, useEffect } from "react";
 
 export default function Appbar({ write = true }: { write: boolean }) {
 	const userDetails = useUserDetails(localStorage.getItem("token"));
+	const [hover, setHover] = useState(false);
+	const dropdownRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target as Node)
+			) {
+				setHover(false);
+			}
+		};
+
+		window.addEventListener("click", handleClickOutside);
+		return () => {
+			window.removeEventListener("click", handleClickOutside);
+		};
+	}, []);
+
 	return (
 		<div
-			className="p-2 px-10 border-b"
+			className="h-16 p-2 px-10 border-b"
 			title="home">
-			<div className="flex justify-between">
+			<div className="flex justify-between ">
 				<Link
-					className="flex"
+					className="flex "
 					to={"/blogs"}>
 					<Logo />
 				</Link>
@@ -20,6 +40,7 @@ export default function Appbar({ write = true }: { write: boolean }) {
 						<Link to={"/write"}>
 							<div className="flex items-center gap-1 font-light cursor-pointer">
 								<div>Write</div>
+
 								<svg
 									width="24"
 									height="24"
@@ -38,9 +59,63 @@ export default function Appbar({ write = true }: { write: boolean }) {
 					) : (
 						""
 					)}
-					<Avatar
-						name={userDetails.name}
-						size="big"></Avatar>
+					<div style={{ position: "relative" }}>
+						{!hover ? (
+							<div className="flex items-center gap-3">
+								<Avatar
+									name={userDetails.name}
+									size="big"
+								/>
+								<div className="flex justify-center gap-1 cursor-pointer ">
+									<div
+										onClick={() => {
+											setHover(!hover);
+										}}
+										className="first-letter:uppercase">
+										{userDetails.name}
+										<span className="relative bottom-0 font-bold">
+											&#8964;
+										</span>
+									</div>
+								</div>
+							</div>
+						) : (
+							<div
+								className="dropdown-content"
+								ref={dropdownRef}>
+								<div
+									onClick={() => {
+										setHover(!hover);
+									}}
+									className="flex items-center gap-3">
+									<Avatar
+										name={userDetails.name}
+										size="big"
+									/>
+									<div className="flex justify-center gap-1 cursor-pointer">
+										<div className="first-letter:uppercase">
+											{userDetails.name}
+											<span className="relative bottom-0 font-bold">
+												&#8964;
+											</span>
+										</div>
+										<div className="relative bottom-0 font-bold"></div>
+									</div>
+								</div>
+								<div className="absolute bg-white dropdown-options top-12">
+									<div className="flex flex-col gap-3 py-3 pl-3 pr-10 border rounded-md shadow-lg text-nowrap">
+										<Link to={"/your-blogs"}>
+											<div>Your Blogs</div>
+										</Link>
+										<div>Settings</div>
+										<div className="pt-1 -mt-1 border-t">
+											Log out
+										</div>
+									</div>
+								</div>
+							</div>
+						)}
+					</div>{" "}
 				</div>
 			</div>
 		</div>
