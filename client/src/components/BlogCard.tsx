@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import ShareBtn from "./ShareBtn";
 import Preview from "./Preview";
+import EditBtn from "./EditBtn";
 
 interface BlogCardProps {
 	authorName: string;
@@ -33,6 +34,7 @@ export default function BlogCard({
 							{authorName}{" "}
 						</div>
 					</Link>
+
 					<div className="pb-3 text-2xl font-bold text-slate-400">
 						.
 					</div>
@@ -40,12 +42,12 @@ export default function BlogCard({
 						{publishedDate}
 					</div>
 				</div>
-				<div>
+				<div className="flex items-center justify-center gap-3">
 					<ShareBtn
 						link={`${window.location.origin}/blog/${id}`}></ShareBtn>
-				</div>{" "}
-				<div>
-					<Link to={"/edit/" + id}>afdlksdfj</Link>
+					<EditBtn
+						authorId={authorId}
+						blogId={id}></EditBtn>
 				</div>
 			</div>
 			<Link
