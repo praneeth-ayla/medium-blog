@@ -135,6 +135,34 @@ blogRouter.get("/bulk", async (c) => {
 	}
 });
 
+blogRouter.get("/both", async (c) => {
+	console.log("bjsadlkfj");
+	const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL,
+	}).$extends(withAccelerate());
+
+	try {
+		const user = await prisma.user.findUnique({
+			where: {
+				id: c.get("userId"),
+			},
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				posts: true,
+			},
+		});
+		return c.json({ user });
+	} catch (error) {
+		console.log("Error: ", error);
+		c.status(403);
+		c.json({
+			message: "Internal Server Error",
+		});
+	}
+});
+
 blogRouter.get("/:id", async (c) => {
 	const id = c.req.param("id");
 
