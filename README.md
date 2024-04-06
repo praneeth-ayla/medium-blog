@@ -2,6 +2,8 @@
 
 This project is a clone of Medium, a platform for publishing articles and engaging with readers. It leverages modern technologies such as React for the frontend, Cloudflare Workers for the backend, and various other tools and libraries to create a seamless user experience.
 
+## You can check out the website [here](https://medium-blog-simple.vercel.app/)
+
 ## Technologies Used
 
 -   **Frontend**: React.js
